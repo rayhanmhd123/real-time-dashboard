@@ -46,3 +46,6 @@ coverage/
 
 # Miscellaneous
 *.log
+
+# Except
+!ecosystem.config.js 
