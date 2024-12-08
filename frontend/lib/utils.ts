@@ -1,16 +1,16 @@
 import { RoomTemperature } from "@/app/dashboard/page";
-import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx";
 import { format, toZonedTime } from "date-fns-tz";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function formatTemperatureData(
   data: RoomTemperature[],
   timezone: string
-) {
+): RoomTemperature[] {
   return data.map((entry) => {
     const zonedTime = toZonedTime(entry.created_at, timezone);
     return {
