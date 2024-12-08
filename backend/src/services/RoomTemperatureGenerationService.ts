@@ -13,6 +13,7 @@ export class RoomTemperatureGenerationService {
 
   startMockDataGeneration() {
     schedule.scheduleJob("*/5 * * * * *", async () => {
+      // Assuming the maximum temperature in this place is 40 degrees Celsius
       const randomTemperature = Math.floor(Math.random() * 40);
       const newRoomTemperature =
         await this.roomTemperatureRepository.saveRoomTemperature(

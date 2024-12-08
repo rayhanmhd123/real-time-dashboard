@@ -7,6 +7,8 @@ export const createApp = () => {
 
   app.use(express.json());
 
+  // Endpoint to get the latest room temperature data
+  // Assumption: Only the latest 20 data entries are displayed
   app.get("/api/data", async (req, res) => {
     try {
       const roomTemperatures = await roomTemperatureController.getLatestRoomTemperatures(20);
