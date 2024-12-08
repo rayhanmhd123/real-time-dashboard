@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
 import { TemperatureBar } from "./components/temperature-bar";
 import { TemperatureLine } from "./components/temperature-line";
-import axios from "axios";
 
 export interface RoomTemperature {
   created_at: string;
@@ -15,7 +14,20 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const response = await axios.get("http://localhost:3001/api/data");
+  const response = await fetch("http://localhost:3001/api/data", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store", 
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const data = await response.json();
+
   return (
     <>
       <div className="flex-col md:flex">
@@ -31,7 +43,7 @@ export default async function DashboardPage() {
                 <CardTitle>Bar Chart</CardTitle>
               </CardHeader>
               <CardContent className="pl-1">
-                <TemperatureBar initialData={response.data} />
+                <TemperatureBar initialData={data} />
               </CardContent>
             </Card>
             <Card className="w-full">
@@ -39,7 +51,7 @@ export default async function DashboardPage() {
                 <CardTitle>Line Chart</CardTitle>
               </CardHeader>
               <CardContent className="pl-1">
-                <TemperatureLine initialData={response.data} />
+                <TemperatureLine initialData={data} />
               </CardContent>
             </Card>
           </div>
