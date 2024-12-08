@@ -9,7 +9,7 @@ export const createApp = () => {
 
   app.get("/api/data", async (req, res) => {
     try {
-      const roomTemperatures = await roomTemperatureController.getLatestRoomTemperatures();
+      const roomTemperatures = await roomTemperatureController.getLatestRoomTemperatures(20);
       res.json(roomTemperatures);
     } catch (error) {
       const errorMessage =
