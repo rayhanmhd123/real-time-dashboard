@@ -1,19 +1,21 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
 import { TemperatureBar } from "./components/temperature-bar";
 import { TemperatureLine } from "./components/temperature-line";
+import axios from "axios";
+
+export interface RoomTemperature {
+  created_at: string;
+  temperature: number;
+}
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Example dashboard app built using the components.",
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const response = await axios.get("http://localhost:3001/api/data");
   return (
     <>
       <div className="flex-col md:flex">
@@ -23,21 +25,21 @@ export default function DashboardPage() {
               Dashboard Temperature
             </h2>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
-            <Card className="col-span-4">
+          <div className="grid gap-4">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Bar Chart</CardTitle>
               </CardHeader>
               <CardContent className="pl-1">
-                <TemperatureBar />
+                <TemperatureBar initialData={response.data} />
               </CardContent>
             </Card>
-            <Card className="col-span-4">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Line Chart</CardTitle>
               </CardHeader>
               <CardContent className="pl-1">
-                <TemperatureLine />
+                <TemperatureLine initialData={response.data} />
               </CardContent>
             </Card>
           </div>

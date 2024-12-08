@@ -1,76 +1,97 @@
 "use client";
 
-import { CartesianGrid, LabelList, Line, LineChart, ResponsiveContainer, XAxis } from "recharts";
-
+import { useEffect, useState } from "react";
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  LabelList,
+} from "recharts";
+import io from "socket.io-client";
+import { format, toZonedTime } from "date-fns-tz";
+import TimezoneSelector from "./time-selector";
+import { RoomTemperature } from "../page";
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+interface TemperatureLineProps {
+  initialData: RoomTemperature[];
+}
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
+const socket = io("http://localhost:3001");
 
-export function TemperatureLine() {
+export function TemperatureLine({ initialData }: TemperatureLineProps) {
+  const [data, setData] = useState(initialData);
+  const [timezone, setTimezone] = useState("Asia/Jakarta");
+
+  useEffect(() => {
+    socket.on("new-data", (newData: RoomTemperature) => {
+      setData((prevData) => {
+        const updatedData = [newData, ...prevData];
+        return updatedData.slice(0, 20);
+      });
+    });
+
+    return () => {
+      socket.off("new-data");
+    };
+  }, []);
+
+  const transformedData = data.map((entry) => {
+    const zonedTime = toZonedTime(entry.created_at, timezone);
+    return {
+      ...entry,
+      created_at: format(zonedTime, "HH:mm:ss"),
+    };
+  });
+
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <ChartContainer config={chartConfig}>
+    <div className="flex flex-col gap-4">
+      {/* Timezone Selector */}
+      <TimezoneSelector
+        selectedTimezone={timezone}
+        onTimezoneChange={setTimezone}
+      />
+
+      {/* Line Chart */}
+      <ResponsiveContainer width="100%" height={350}>
         <LineChart
-          accessibilityLayer
-          data={chartData}
-          margin={{
-            top: 20,
-            left: 30,
-            right: 12,
-          }}
+          data={transformedData}
+          margin={{ bottom: 15, left: 15, right: 30 }}
         >
           <CartesianGrid vertical={false} />
           <XAxis
-            dataKey="month"
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            tickFormatter={(value) => value.slice(0, 3)}
+            dataKey="created_at"
+            fontSize={12}
+            label={{
+              value: "Time (5-second intervals)",
+              position: "insideBottom",
+              offset: -10,
+            }}
           />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent indicator="line" />}
+          <YAxis
+            domain={[0, 50]}
+            fontSize={12}
+            tickFormatter={(value) => `${value}°C`}
+            label={{
+              value: "Temperature (°C)",
+              angle: -90,
+              position: "insideLeft",
+            }}
           />
           <Line
-            dataKey="desktop"
+            dataKey="temperature"
             type="natural"
-            stroke="var(--color-desktop)"
+            stroke="#8884d8"
             strokeWidth={2}
-            dot={{
-              fill: "var(--color-desktop)",
-            }}
-            activeDot={{
-              r: 6,
-            }}
+            dot={{ fill: "#8884d8" }}
+            activeDot={{ r: 6 }}
           >
-            <LabelList
-              position="top"
-              offset={12}
-              className="fill-foreground"
-              fontSize={12}
-            />
+            <LabelList position="top" offset={12} fontSize={12} />
           </Line>
         </LineChart>
-      </ChartContainer>
-    </ResponsiveContainer>
+      </ResponsiveContainer>
+    </div>
   );
 }
