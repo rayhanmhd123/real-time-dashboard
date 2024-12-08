@@ -1,9 +1,12 @@
 import { DataSource } from "typeorm";
 import { RoomTemperature } from "../entities/RoomTemperature";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const AppDataSource = new DataSource({
-  type: "sqlite",
-  database: "./database.sqlite",
+  type: "mongodb",
+  url: process.env.DB_URL || "localhost",
   synchronize: true,
   logging: false,
   entities: [RoomTemperature],

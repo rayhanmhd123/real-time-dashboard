@@ -3,6 +3,9 @@ import { createApp } from "./app";
 import { initializeDatabase } from "./config/databaseConfig";
 import { SocketService } from "./services/SocketService";
 import { RoomTemperatureGenerationService } from "./services/RoomTemperatureGenerationService";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const startServer = async () => {
   await initializeDatabase();

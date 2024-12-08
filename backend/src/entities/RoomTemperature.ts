@@ -1,14 +1,15 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ObjectIdColumn,
+  ObjectId,
 } from "typeorm";
 
 @Entity("room_temperature")
 export class RoomTemperature {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @ObjectIdColumn()
+  id!: ObjectId;
 
   @CreateDateColumn({ type: "datetime" })
   created_at!: Date;

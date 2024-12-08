@@ -13,8 +13,11 @@ export class RoomTemperatureGenerationService {
 
   startMockDataGeneration() {
     schedule.scheduleJob("*/5 * * * * *", async () => {
-      const randomTemperature = Math.random() * 40; // Random temperature between 0 and 40
-      const newRoomTemperature = await this.roomTemperatureRepository.saveRoomTemperature(randomTemperature);
+      const randomTemperature = Math.floor(Math.random() * 40);
+      const newRoomTemperature =
+        await this.roomTemperatureRepository.saveRoomTemperature(
+          randomTemperature
+        );
 
       // Broadcast to all connected clients
       this.socketService.emitNewData(newRoomTemperature);
