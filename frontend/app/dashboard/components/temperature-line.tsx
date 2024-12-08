@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Line,
   LineChart,
@@ -10,41 +10,19 @@ import {
   CartesianGrid,
   LabelList,
 } from "recharts";
-import io from "socket.io-client";
-import { format, toZonedTime } from "date-fns-tz";
 import TimezoneSelector from "./time-selector";
 import { RoomTemperature } from "../page";
+import { useTemperatureData } from "@/lib/useTemperatureData";
+import { formatTemperatureData } from "@/lib/utils";
 
 interface TemperatureLineProps {
   initialData: RoomTemperature[];
 }
 
-const socket = io("http://localhost:3001");
-
 export function TemperatureLine({ initialData }: TemperatureLineProps) {
-  const [data, setData] = useState(initialData);
   const [timezone, setTimezone] = useState("Asia/Jakarta");
-
-  useEffect(() => {
-    socket.on("new-data", (newData: RoomTemperature) => {
-      setData((prevData) => {
-        const updatedData = [newData, ...prevData];
-        return updatedData.slice(0, 20);
-      });
-    });
-
-    return () => {
-      socket.off("new-data");
-    };
-  }, []);
-
-  const transformedData = data.map((entry) => {
-    const zonedTime = toZonedTime(entry.created_at, timezone);
-    return {
-      ...entry,
-      created_at: format(zonedTime, "HH:mm:ss"),
-    };
-  });
+  const rawData = useTemperatureData(initialData);
+  const transformedData = formatTemperatureData(rawData, timezone);
 
   return (
     <div className="flex flex-col gap-4">
