@@ -9,7 +9,7 @@
 ### Backend Setup
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/real-time-dashboard.git
+   git clone https://github.com/rayhanmhd123/real-time-dashboard.git
    cd real-time-dashboard/backend
    ```
 
