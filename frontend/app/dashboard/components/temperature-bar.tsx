@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import TimezoneSelector from "./time-selector";
 import { RoomTemperature } from "../page";
 import { useTemperatureData } from "@/lib/useTemperatureData";
@@ -57,7 +57,9 @@ export function TemperatureBar({ initialData }: TemperatureBarProps) {
             fill="currentColor"
             radius={[4, 4, 0, 0]}
             className="fill-primary"
-          />
+          >
+            <LabelList position="top" offset={12} fontSize={12} />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
