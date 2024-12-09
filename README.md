@@ -73,3 +73,10 @@
 - Node.js
 - MongoDB
 - Yarn
+
+## Development Challenges
+- Forgot to set the endpoint for the server in the environment configuration, causing issues during deployment.
+
+## Production server
+- FE : http://103.129.148.170:3011/dashboard
+- BE : http://103.129.148.170:3010/dashboard
