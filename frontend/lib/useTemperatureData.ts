@@ -2,7 +2,7 @@ import { RoomTemperature } from "@/app/dashboard/page";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const socket = io("http://localhost:3010");
 
 export function useTemperatureData(
   initialData: RoomTemperature[]

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const response = await fetch("http://localhost:3001/api/data", {
+  const response = await fetch("http://localhost:3010/api/data", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
