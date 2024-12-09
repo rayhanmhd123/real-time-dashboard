@@ -50,7 +50,14 @@
 ### Backend Deployment
 - Ensure cloud provider supports Node.js v20
 - Configure environment variables
-- Deploy backend code
+- Install PM2 globally:
+   ```sh
+   npm install -g pm2
+   ```
+- Start the backend using PM2:
+   ```
+   pm2 start ecosystem.config.js
+   ```
 
 ### Frontend Deployment
 1. Build for production:
@@ -58,7 +65,10 @@
    yarn build
    ```
 
-2. Deploy build output
+2. Start the frontend using PM2:
+   ```
+   pm2 start ecosystem.config.js
+   ```
 
 ## Assumptions
 - Data displayed is limited to 20 items.
