@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const response = await fetch("http://localhost:3010/api/data", {
+  const response = await fetch("http://103.129.148.170:3010/api/data", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    cache: "no-store", 
+    cache: "no-store",
   });
 
   if (!response.ok) {
