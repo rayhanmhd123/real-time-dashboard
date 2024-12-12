@@ -72,6 +72,8 @@
 
 ## Assumptions
 - Data displayed is limited to 20 items.
+- Minimum temperature is 0°C
+- Maximum temperature is 40°C
 
 ## Folder Structure
 - Backend endpoints are organized in a folder named endpoints to facilitate maintenance as the project scales.
